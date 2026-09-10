@@ -60,11 +60,11 @@ export const Banner: React.FC<BannerProps> = ({ onRunCommand }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-terminal-muted pt-0.5">
               <div className="flex items-center gap-1.5">
                 <Terminal size={13} className="text-terminal-accent flex-shrink-0" />
-                <span>Work: Enterprise Campus Servers (HPC/Mail) SysAdmin (Computer Centre)</span>
+                <span>Work: AI Engineer Intern (BharatGen) • SysAdmin (Computer Centre)</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Building2 size={13} className="text-terminal-accent flex-shrink-0" />
-                <span>College: IIT Bombay (CSE / CC Base)</span>
+                <span>Department: Electrical Engineering</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Cpu size={13} className="text-terminal-accent flex-shrink-0" />

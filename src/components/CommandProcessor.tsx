@@ -190,21 +190,12 @@ export const CommandProcessor: React.FC<CommandProcessorProps> = ({
           // ignore popup blocker
         }
         return (
-          <div className="text-terminal-accent font-mono text-xs sm:text-sm space-y-1.5 my-1">
-            <div className="text-terminal-success font-semibold flex items-center gap-2">
-              <span>⚡</span> [sudo] Root privileges granted: Executing Claude&apos;s Plan...
-            </div>
+          <div className="text-terminal-accent font-mono text-xs sm:text-sm space-y-1 my-1">
             <div className="text-terminal-muted">
-              Redirecting to{' '}
-              <a
-                href="https://youtu.be/gFx-NjTw3sM?si=nioz-MGmr-Lc6ogG&t=111"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-terminal-accent font-semibold underline hover:text-terminal-text"
-              >
-                Claude&apos;s Plan (https://youtu.be/gFx-NjTw3sM)
-              </a>
-              ... (click link if popup was blocked)
+              [sudo] password for visitor: **********
+            </div>
+            <div className="text-terminal-success font-semibold flex items-center gap-1.5">
+              <span>⚡</span> [sudo] root privileges granted.
             </div>
           </div>
         );

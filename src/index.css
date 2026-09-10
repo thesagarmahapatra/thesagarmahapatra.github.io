@@ -303,4 +303,9 @@ body {
     min-height: calc(100vh - 140px);
     padding-bottom: 80px;
   }
+
+  /* Prevent iOS Safari from auto-zooming on tap/input focus (requires >=16px) */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
 }

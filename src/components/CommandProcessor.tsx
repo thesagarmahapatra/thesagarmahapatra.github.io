@@ -201,6 +201,71 @@ export const CommandProcessor: React.FC<CommandProcessorProps> = ({
         );
       }
 
+      /* ── Editor troll chain: vi → vim → nvim → nano → vscode → sudo ── */
+      case 'vi':
+        return (
+          <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
+            <div className="text-terminal-error">zsh: command not found: vi</div>
+            <div className="text-terminal-muted">
+              vi is not installed on this system. Maybe try{' '}
+              <span className="text-terminal-accent font-bold cursor-pointer hover:underline" onClick={() => onRunCommand?.('vim')}>vim</span>?
+            </div>
+          </div>
+        );
+
+      case 'vim':
+        return (
+          <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
+            <div className="text-terminal-error">zsh: command not found: vim</div>
+            <div className="text-terminal-muted">
+              You don't have vim either. Perhaps try{' '}
+              <span className="text-terminal-accent font-bold cursor-pointer hover:underline" onClick={() => onRunCommand?.('nvim')}>nvim</span>?
+            </div>
+          </div>
+        );
+
+      case 'nvim':
+      case 'neovim':
+        return (
+          <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
+            <div className="text-terminal-error">zsh: command not found: nvim</div>
+            <div className="text-terminal-muted">
+              Neovim isn't installed either. You could try{' '}
+              <span className="text-terminal-accent font-bold cursor-pointer hover:underline" onClick={() => onRunCommand?.('nano')}>nano</span>?
+            </div>
+          </div>
+        );
+
+      case 'nano':
+        return (
+          <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
+            <div className="text-terminal-error">zsh: command not found: nano</div>
+            <div className="text-terminal-muted">
+              You don't have nano either. Surely you have{' '}
+              <span className="text-terminal-accent font-bold cursor-pointer hover:underline" onClick={() => onRunCommand?.('vscode')}>vscode</span>?
+            </div>
+          </div>
+        );
+
+      case 'vscode':
+      case 'code': {
+        try {
+          window.open('https://youtu.be/gFx-NjTw3sM?si=nioz-MGmr-Lc6ogG&t=111', '_blank', 'noopener,noreferrer');
+        } catch {
+          // ignore popup blocker
+        }
+        return (
+          <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
+            <div className="text-terminal-error font-semibold">E: sudo access required for vscode</div>
+            <div className="text-terminal-success">⚡ [sudo] root privileges granted. Launching...</div>
+            {/* use prompting, not typing */}
+            <div className="text-terminal-muted text-[11px] italic mt-1">
+              hint: use prompting, not typing.
+            </div>
+          </div>
+        );
+      }
+
       case 'clear':
       case 'cls':
         return null;

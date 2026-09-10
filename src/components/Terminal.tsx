@@ -28,7 +28,8 @@ export const Terminal: React.FC = () => {
     'help', 'about', 'whoami', 'projects', 'man', 'experience', 
     'research', 'skills', 'education', 'achievements', 'photo', 
     'ascii', 'portrait', 'neofetch', 'contact', 'email', 'socials', 
-    'theme', 'clear', 'banner', 'date', 'sudo'
+    'theme', 'clear', 'banner', 'date', 'sudo',
+    'vi', 'vim', 'nvim', 'nano', 'vscode', 'code'
   ];
 
   // Initialize with the Welcome Banner

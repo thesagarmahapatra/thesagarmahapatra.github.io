@@ -9,7 +9,7 @@ export const LoadingScreen: React.FC = () => {
     'Initializing IIT Bombay kernel environment...',
     'Loading Machine Learning Lab & BharatGen modules...',
     'Mounting high-performance compute nodes & filesystems...',
-    'Verifying Postfix & Redis telemetry subsystems...',
+    'Verifying Enterprise Campus Servers (HPC/Mail) subsystems...',
     'Compiling ARM64 SIMD & speculative decoding cache...',
     'Terminal ready!'
   ];
@@ -17,10 +17,10 @@ export const LoadingScreen: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
-        const next = prev + 25;
-        return Math.min(next, 100);
+        if (prev >= 100) return 100;
+        return Math.min(prev + 4, 100);
       });
-    }, 180);
+    }, 100);
 
     return () => clearInterval(interval);
   }, []);
@@ -31,7 +31,7 @@ export const LoadingScreen: React.FC = () => {
         setBootText(prev => [...prev, bootSequence[stage]]);
         setStage(prev => prev + 1);
       }
-    }, 160);
+    }, 380);
 
     return () => clearInterval(textInterval);
   }, [stage]);

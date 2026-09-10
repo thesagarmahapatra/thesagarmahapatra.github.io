@@ -205,42 +205,30 @@ export const CommandProcessor: React.FC<CommandProcessorProps> = ({
             </div>
           );
         }
-        // default sudo → Claude's Plan
-        try {
-          window.open('https://youtu.be/gFx-NjTw3sM?si=nioz-MGmr-Lc6ogG&t=111', '_blank', 'noopener,noreferrer');
-        } catch {
-          // ignore popup blocker
-        }
+        // default sudo → sysad warning
         return (
           <div className="text-terminal-accent font-mono text-xs sm:text-sm space-y-1 my-1">
             <div className="text-terminal-muted">
               [sudo] password for visitor: **********
             </div>
-            <div className="text-terminal-success font-semibold flex items-center gap-1.5">
-              <span>⚡</span> [sudo] root privileges granted.
+            <div className="text-terminal-error font-semibold">
+              visitor is not in the sudoers file.
+            </div>
+            <div className="text-terminal-warning text-xs">
+              This incident will be reported to the IITB Computer Center SysAds.
             </div>
           </div>
         );
       }
 
-      /* ── Editor troll chain: vi → vim → nvim → nano → vscode → sudo ── */
+      /* ── Editor troll chain: vim → nvim → nano → vscode → sudo vscode ── */
       case 'vi':
-        return (
-          <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
-            <div className="text-terminal-error">zsh: command not found: vi</div>
-            <div className="text-terminal-muted">
-              vi is not installed on this system. Maybe try{' '}
-              <span className="text-terminal-accent font-bold cursor-pointer hover:underline" onClick={() => onRunCommand?.('vim')}>vim</span>?
-            </div>
-          </div>
-        );
-
       case 'vim':
         return (
           <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
             <div className="text-terminal-error">zsh: command not found: vim</div>
             <div className="text-terminal-muted">
-              You don't have vim either. Perhaps try{' '}
+              vim is not installed on this system. Maybe try{' '}
               <span className="text-terminal-accent font-bold cursor-pointer hover:underline" onClick={() => onRunCommand?.('nvim')}>nvim</span>?
             </div>
           </div>

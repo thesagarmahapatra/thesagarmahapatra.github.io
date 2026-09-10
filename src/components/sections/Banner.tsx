@@ -92,7 +92,7 @@ export const Banner: React.FC<BannerProps> = ({ onRunCommand }) => {
                 Type <span className="text-terminal-success font-bold">help</span> or click any command to execute:
               </div>
               <div className="flex flex-wrap gap-1.5 text-xs">
-                {['about', 'projects', 'experience', 'research', 'sudo', 'vi', 'skills', 'education', 'achievements', 'photo', 'neofetch', 'contact'].map(cmd => (
+                {['about', 'projects', 'experience', 'research', 'sudo', 'vim', 'skills', 'education', 'achievements', 'photo', 'neofetch', 'contact'].map(cmd => (
                   <button
                     key={cmd}
                     onClick={() => handleCmd(cmd)}

@@ -184,6 +184,28 @@ export const CommandProcessor: React.FC<CommandProcessorProps> = ({
         );
 
       case 'sudo': {
+        const sudoArg = args[0]?.toLowerCase();
+        // sudo vscode / sudo code → editor troll payoff
+        if (sudoArg === 'vscode' || sudoArg === 'code') {
+          try {
+            window.open('https://youtu.be/gFx-NjTw3sM?si=nioz-MGmr-Lc6ogG&t=111', '_blank', 'noopener,noreferrer');
+          } catch {
+            // ignore popup blocker
+          }
+          return (
+            <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
+              <div className="text-terminal-muted">
+                [sudo] password for visitor: **********
+              </div>
+              <div className="text-terminal-success font-semibold">⚡ [sudo] root privileges granted. Launching vscode...</div>
+              {/* use prompting, not typing */}
+              <div className="text-terminal-muted text-[11px] italic mt-1">
+                hint: use prompting, not typing.
+              </div>
+            </div>
+          );
+        }
+        // default sudo → Claude's Plan
         try {
           window.open('https://youtu.be/gFx-NjTw3sM?si=nioz-MGmr-Lc6ogG&t=111', '_blank', 'noopener,noreferrer');
         } catch {
@@ -248,23 +270,15 @@ export const CommandProcessor: React.FC<CommandProcessorProps> = ({
         );
 
       case 'vscode':
-      case 'code': {
-        try {
-          window.open('https://youtu.be/gFx-NjTw3sM?si=nioz-MGmr-Lc6ogG&t=111', '_blank', 'noopener,noreferrer');
-        } catch {
-          // ignore popup blocker
-        }
+      case 'code':
         return (
           <div className="text-terminal-text font-mono text-xs sm:text-sm space-y-1 my-1">
             <div className="text-terminal-error font-semibold">E: sudo access required for vscode</div>
-            <div className="text-terminal-success">⚡ [sudo] root privileges granted. Launching...</div>
-            {/* use prompting, not typing */}
-            <div className="text-terminal-muted text-[11px] italic mt-1">
-              hint: use prompting, not typing.
+            <div className="text-terminal-muted">
+              Try: <span className="text-terminal-accent font-bold">sudo vscode</span>
             </div>
           </div>
         );
-      }
 
       case 'clear':
       case 'cls':

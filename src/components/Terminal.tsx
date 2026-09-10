@@ -193,7 +193,10 @@ export const Terminal: React.FC = () => {
     const target = e.target as HTMLElement;
     const isInteractive = target.closest('button, a, input, textarea, select, [role="button"]');
     if (!isInteractive && inputRef.current) {
-      inputRef.current.focus();
+      // Only auto-focus on desktop on generic background clicks; on mobile, allow natural scrolling without keyboard jump
+      if (window.innerWidth > 768) {
+        inputRef.current.focus({ preventScroll: true });
+      }
     }
   };
 
@@ -318,7 +321,11 @@ export const Terminal: React.FC = () => {
         ))}
 
         {/* The Native Active Prompt Line */}
-        <form onSubmit={handleSubmit} className="terminal-active-line flex items-center space-x-2 pt-1">
+        <form 
+          onSubmit={handleSubmit} 
+          onClick={() => inputRef.current?.focus({ preventScroll: true })}
+          className="terminal-active-line flex items-center space-x-2 pt-1 cursor-text"
+        >
           <span className="text-terminal-accent font-bold text-xs sm:text-sm flex-shrink-0 select-none">
             sagar@iitb:~$
           </span>
@@ -328,7 +335,8 @@ export const Terminal: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent border-none outline-none text-terminal-text caret-terminal-accent font-mono text-base sm:text-sm p-0 m-0 focus:ring-0 focus:outline-none"
+            style={{ fontSize: '17px' }}
+            className="flex-1 bg-transparent border-none outline-none text-terminal-text caret-terminal-accent font-mono text-[17px] md:text-sm p-0 m-0 focus:ring-0 focus:outline-none"
             autoFocus
             autoComplete="off"
             autoCapitalize="off"

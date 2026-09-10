@@ -7,7 +7,7 @@ export const LoadingScreen: React.FC = () => {
 
   const bootSequence = [
     'Initializing IIT Bombay kernel environment...',
-    'Loading Machine Learning Lab & BharatGen modules...',
+    'Loading AI & BharatGen modules...',
     'Mounting high-performance compute nodes & filesystems...',
     'Verifying Enterprise Campus Servers (HPC/Mail) subsystems...',
     'Compiling ARM64 SIMD & speculative decoding cache...',
@@ -74,7 +74,7 @@ export const LoadingScreen: React.FC = () => {
         {/* System Info */}
         <div className="text-xs text-terminal-muted space-y-0.5 font-mono">
           <div className="text-terminal-accent font-semibold">Sagar Swaraj Mahapatra | IIT Bombay</div>
-          <div>Machine Learning Lab, CSE & Computer Centre</div>
+          <div>AI across EE & CSE • Computer Centre</div>
         </div>
       </div>
     </div>

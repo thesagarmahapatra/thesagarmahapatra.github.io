@@ -24,14 +24,15 @@ export const WhoAmI: React.FC<WhoAmIProps> = ({ onRunCommand }) => {
         {/* Lead Bio */}
         <div className="text-sm text-terminal-text space-y-3 leading-relaxed">
           <p>
-            I am a Graduate Student (M.Tech) and Systems/ML Researcher in the{' '}
-            <strong className="text-terminal-accent font-semibold">Machine Learning Lab, Dept. of Computer Science & Engineering (CSE)</strong> at{' '}
+            I am a Graduate Student (M.Tech) and Systems/ML Researcher in{' '}
+            <strong className="text-terminal-accent font-semibold">AI</strong> across{' '}
+            <strong className="text-terminal-accent font-semibold">EE & CSE</strong> at{' '}
             <strong className="text-terminal-accent font-semibold">IIT Bombay</strong>, affiliated with{' '}
             <strong className="text-terminal-accent font-semibold">BharatGen</strong> (National Mission on AI, MeitY).
           </p>
 
           <p>
-            <strong>Research & Systems Infrastructure:</strong> My core focus lies at the intersection of high-performance deep learning systems and enterprise-grade computing infrastructure. In the <strong>Machine Learning Lab</strong>, I work on high-throughput LLM inference acceleration — specializing in speculative decoding, multi-token prediction (MTP), and KV-cache compression. Concurrently, as a System Administrator at the <strong>Computer Centre (CC)</strong> in the New CSE Building, I architect and maintain mission-critical infrastructure, including Enterprise Campus Servers (HPC/Mail) safeguarding 20,000+ accounts, sub-millisecond Redis rate-limiting/telemetry daemons, and compute nodes.
+            <strong>Research & Systems Infrastructure:</strong> My core focus lies at the intersection of high-performance deep learning systems and enterprise-grade computing infrastructure. In AI research, I work on high-throughput LLM inference acceleration — specializing in speculative decoding, multi-token prediction (MTP), and KV-cache compression. Concurrently, as a System Administrator at the <strong>Computer Centre (CC)</strong> in the New CSE Building, I architect and maintain mission-critical infrastructure, including Enterprise Campus Servers (HPC/Mail) safeguarding 20,000+ accounts, sub-millisecond Redis rate-limiting/telemetry daemons, and compute nodes.
           </p>
 
           <p>

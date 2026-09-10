@@ -41,7 +41,13 @@ export const Banner: React.FC<BannerProps> = ({ onRunCommand }) => {
                 IIT Bombay
               </span>
               <span className="px-2 py-0.5 text-[11px] rounded bg-terminal-accent/15 text-terminal-accent border border-terminal-accent/30 font-semibold">
-                Machine Learning Lab (CSE)
+                EE
+              </span>
+              <span className="px-2 py-0.5 text-[11px] rounded bg-terminal-accent/15 text-terminal-accent border border-terminal-accent/30 font-semibold">
+                CSE
+              </span>
+              <span className="px-2 py-0.5 text-[11px] rounded bg-terminal-accent/15 text-terminal-accent border border-terminal-accent/30 font-semibold">
+                AI
               </span>
               <span className="px-2 py-0.5 text-[11px] rounded bg-terminal-accent/15 text-terminal-accent border border-terminal-accent/30 font-semibold">
                 BharatGen
@@ -50,8 +56,9 @@ export const Banner: React.FC<BannerProps> = ({ onRunCommand }) => {
 
             {/* Profile Bio */}
             <p className="text-terminal-text text-xs sm:text-sm leading-relaxed">
-              Graduate Student (M.Tech) & Systems/ML Researcher in the{' '}
-              <strong className="text-terminal-accent font-semibold">Machine Learning Lab, Dept. of Computer Science & Engineering</strong> at{' '}
+              Graduate Student (M.Tech) & Systems/ML Researcher in{' '}
+              <strong className="text-terminal-accent font-semibold">AI</strong> across{' '}
+              <strong className="text-terminal-accent font-semibold">EE & CSE</strong> at{' '}
               <strong className="text-terminal-accent font-semibold">IIT Bombay</strong>, affiliated with{' '}
               <strong className="text-terminal-accent font-semibold">BharatGen</strong> (MeitY). Focused on LLM inference acceleration, speculative decoding (EAGLE/MTP), and Enterprise Campus Servers (HPC/Mail).
             </p>

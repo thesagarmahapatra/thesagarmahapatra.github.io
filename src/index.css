@@ -176,50 +176,52 @@ body {
 /* ASCII Photo Portrait Frame */
 .ascii-photo-frame {
   display: inline-block;
-  padding: 8px 12px;
-  background: #0d1117;
+  padding: 4px 6px;
+  background: #000000;
   border: 1px solid var(--terminal-border);
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
   max-width: 100%;
   overflow: hidden;
 }
 
 .ascii-photo-art {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 5.5px;
-  line-height: 4.8px;
-  letter-spacing: 0;
+  font-size: 2.4px;
+  line-height: 2.1px;
+  letter-spacing: -0.1px;
   white-space: pre;
   overflow-x: auto;
   user-select: text;
-  background-color: #05070a;
-  padding: 6px;
+  background-color: #000000;
+  padding: 4px;
   border-radius: 4px;
+  image-rendering: pixelated;
+  -webkit-font-smoothing: antialiased;
 }
 
 @media (max-width: 768px) {
   .ascii-photo-art {
-    font-size: 3.5px;
-    line-height: 3.2px;
+    font-size: 1.8px;
+    line-height: 1.6px;
   }
 }
 
 /* ASCII Banner */
 .ascii-banner {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 11px;
-  line-height: 12px;
+  font-size: 8px;
+  line-height: 9px;
   white-space: pre;
   color: var(--terminal-accent);
   overflow-x: auto;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 @media (max-width: 768px) {
   .ascii-banner {
-    font-size: 7px;
-    line-height: 8px;
+    font-size: 5.5px;
+    line-height: 6.5px;
   }
 }
 

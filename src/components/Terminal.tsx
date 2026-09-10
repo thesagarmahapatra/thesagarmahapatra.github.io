@@ -1,30 +1,25 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Terminal as TerminalIcon, Volume2, VolumeX, RotateCcw, Minus } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Terminal as TerminalIcon, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSound } from '../hooks/useSound';
-import { TypingAnimation } from './TypingAnimation';
+import { CommandProcessor } from './CommandProcessor';
+import { Banner } from './sections/Banner';
 
-interface TerminalProps {
-  onCommand: (command: string, args: string[]) => void;
-  output: React.ReactNode[];
-  isProcessing: boolean;
-  onClear?: () => void;
-  onReset?: () => void;
+interface TerminalEntry {
+  id: string;
+  command?: string;
+  output?: React.ReactNode;
 }
 
-export const Terminal: React.FC<TerminalProps> = ({ 
-  onCommand, 
-  output, 
-  isProcessing,
-  onClear,
-  onReset
-}) => {
+export const Terminal: React.FC = () => {
+  const [entries, setEntries] = useState<TerminalEntry[]>([]);
   const [input, setInput] = useState('');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const outputRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { playBell, playKeypress } = useSound();
 
@@ -35,146 +30,235 @@ export const Terminal: React.FC<TerminalProps> = ({
     'theme', 'clear', 'banner', 'date', 'sudo'
   ];
 
+  // Initialize with the Welcome Banner
   useEffect(() => {
-    if (outputRef.current) {
-      outputRef.current.scrollTo({
-        top: outputRef.current.scrollHeight,
+    setEntries([
+      {
+        id: 'init-banner',
+        command: '',
+        output: <Banner onRunCommand={runCommand} />
+      }
+    ]);
+  }, []);
+
+  // Auto-scroll to bottom when entries change
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTo({
+        top: terminalRef.current.scrollHeight,
         behavior: 'smooth'
       });
     }
-  }, [output]);
+  }, [entries]);
 
+  // Keep focus on input
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+    inputRef.current?.focus();
+  }, [entries]);
 
-  const runCmdString = (cmdString: string) => {
-    if (!cmdString.trim()) return;
+  const runCommand = useCallback((cmdString: string) => {
+    const trimmed = cmdString.trim();
+    if (!trimmed) {
+      // Empty enter pressed: just add an empty prompt line like a real shell
+      setEntries(prev => [
+        ...prev,
+        { id: `empty-${Date.now()}`, command: '', output: null }
+      ]);
+      return;
+    }
+
     if (soundEnabled) playBell();
 
-    const [command, ...args] = cmdString.trim().split(' ');
-    setCommandHistory(prev => [...prev, cmdString]);
+    const parts = trimmed.split(/\s+/);
+    const command = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    // Save to history
+    setCommandHistory(prev => [...prev, trimmed]);
     setHistoryIndex(-1);
-    onCommand(command.toLowerCase(), args);
+
+    if (command === 'clear' || command === 'cls') {
+      setEntries([]);
+      setInput('');
+      return;
+    }
+
+    if (command === 'logout' || command === 'exit') {
+      setEntries(prev => [
+        ...prev,
+        {
+          id: `cmd-${Date.now()}`,
+          command: trimmed,
+          output: (
+            <div className="text-terminal-warning text-xs font-mono my-1">
+              Session closed. Restarting terminal...
+            </div>
+          )
+        }
+      ]);
+      setTimeout(() => {
+        setEntries([
+          {
+            id: `restart-${Date.now()}`,
+            command: '',
+            output: <Banner onRunCommand={runCommand} />
+          }
+        ]);
+      }, 1000);
+      setInput('');
+      return;
+    }
+
+    // Append command and its output inline into the terminal buffer
+    setEntries(prev => [
+      ...prev,
+      {
+        id: `cmd-${Date.now()}`,
+        command: trimmed,
+        output: (
+          <CommandProcessor
+            command={command}
+            args={args}
+            commandHistory={commandHistory}
+            onRunCommand={runCommand}
+          />
+        )
+      }
+    ]);
+
     setInput('');
-  };
+  }, [soundEnabled, commandHistory]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    runCmdString(input);
+    runCommand(input);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (soundEnabled && e.key.length === 1) playKeypress();
+    if (soundEnabled && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+      playKeypress();
+    }
 
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
-        const newIndex = historyIndex + 1;
-        setHistoryIndex(newIndex);
-        setInput(commandHistory[commandHistory.length - 1 - newIndex]);
+        const nextIdx = historyIndex + 1;
+        setHistoryIndex(nextIdx);
+        setInput(commandHistory[commandHistory.length - 1 - nextIdx]);
       }
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (historyIndex > 0) {
-        const newIndex = historyIndex - 1;
-        setHistoryIndex(newIndex);
-        setInput(commandHistory[commandHistory.length - 1 - newIndex]);
+        const nextIdx = historyIndex - 1;
+        setHistoryIndex(nextIdx);
+        setInput(commandHistory[commandHistory.length - 1 - nextIdx]);
       } else if (historyIndex === 0) {
         setHistoryIndex(-1);
         setInput('');
       }
     } else if (e.key === 'Tab') {
       e.preventDefault();
-
-      const currentInput = input.trim().toLowerCase();
-      if (!currentInput) {
+      const current = input.trim().toLowerCase();
+      if (!current) {
         setInput('help');
         return;
       }
 
-      const [commandPart] = currentInput.split(' ');
-      const matches = commandsList.filter(cmd => cmd.startsWith(commandPart));
-
+      const [firstPart, ...rest] = current.split(' ');
+      const matches = commandsList.filter(c => c.startsWith(firstPart));
       if (matches.length === 1) {
-        const [_, ...rest] = input.split(' ');
         setInput(rest.length > 0 ? `${matches[0]} ${rest.join(' ')}` : matches[0]);
       } else if (matches.length > 1) {
-        let commonPrefix = matches[0];
+        // common prefix
+        let prefix = matches[0];
         for (let i = 1; i < matches.length; i++) {
           let j = 0;
-          while (j < commonPrefix.length && 
-                 j < matches[i].length && 
-                 commonPrefix[j] === matches[i][j]) {
+          while (j < prefix.length && j < matches[i].length && prefix[j] === matches[i][j]) {
             j++;
           }
-          commonPrefix = commonPrefix.substring(0, j);
+          prefix = prefix.substring(0, j);
         }
-
-        if (commonPrefix.length > commandPart.length) {
-          const [_, ...rest] = input.split(' ');
-          setInput(rest.length > 0 ? `${commonPrefix} ${rest.join(' ')}` : commonPrefix);
+        if (prefix.length > firstPart.length) {
+          setInput(rest.length > 0 ? `${prefix} ${rest.join(' ')}` : prefix);
         }
       }
     } else if (e.ctrlKey && e.key === 'l') {
       e.preventDefault();
-      if (onClear) onClear();
+      setEntries([]);
+      setInput('');
     }
   };
 
-  const handleFocus = (e: React.MouseEvent) => {
+  // Clicking anywhere on the terminal window focuses the prompt
+  const handleWindowClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    const isInteractiveElement = target.closest('form, input, textarea, button, a, [role="button"]');
-    
-    if (!isInteractiveElement && inputRef.current) {
+    const isInteractive = target.closest('button, a, input, textarea, select, [role="button"]');
+    if (!isInteractive && inputRef.current) {
       inputRef.current.focus();
     }
   };
 
+  const handleReset = () => {
+    setEntries([
+      {
+        id: `reset-${Date.now()}`,
+        command: '',
+        output: <Banner onRunCommand={runCommand} />
+      }
+    ]);
+    setInput('');
+    setCommandHistory([]);
+  };
+
+  const handleClear = () => {
+    setEntries([]);
+    setInput('');
+  };
+
   return (
-    <div className="terminal-container h-full flex flex-col bg-terminal text-terminal-text font-mono">
-      {/* Terminal Header */}
-      <div className="terminal-header flex items-center justify-between px-3 py-2 bg-terminal-header border-b border-terminal-border select-none">
+    <div 
+      className="terminal-container h-full flex flex-col bg-terminal text-terminal-text font-mono select-text"
+      onClick={handleWindowClick}
+    >
+      {/* Top Window Bar */}
+      <div className="terminal-header flex items-center justify-between px-3 py-2 bg-terminal-header border-b border-terminal-border select-none flex-shrink-0">
         <div className="flex items-center space-x-2">
-          {/* macOS window control dots */}
+          {/* macOS controls */}
           <div className="flex space-x-1.5 mr-2">
             <button
-              onClick={onReset}
-              className="w-3 h-3 rounded-full bg-[#ff5f56] hover:opacity-80 transition-opacity flex items-center justify-center group"
+              onClick={handleReset}
+              className="w-3 h-3 rounded-full bg-[#ff5f56] hover:opacity-80 transition-opacity"
               title="Reset Terminal Session"
             />
             <button
-              onClick={onClear}
-              className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:opacity-80 transition-opacity flex items-center justify-center group"
-              title="Clear Terminal (Ctrl+L)"
+              onClick={handleClear}
+              className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:opacity-80 transition-opacity"
+              title="Clear Buffer (Ctrl+L)"
             />
             <button
               onClick={toggleTheme}
-              className="w-3 h-3 rounded-full bg-[#27c93f] hover:opacity-80 transition-opacity flex items-center justify-center group"
-              title="Toggle Theme"
+              className="w-3 h-3 rounded-full bg-[#27c93f] hover:opacity-80 transition-opacity"
+              title="Toggle Color Theme"
             />
           </div>
 
           <div className="flex items-center gap-1.5 text-xs text-terminal-muted font-semibold">
             <TerminalIcon size={14} className="text-terminal-accent" />
-            <span className="text-terminal-text">sagar@iitb-cse</span>
+            <span className="text-terminal-text font-bold">sagar@iitb-cse</span>
             <span>:</span>
             <span className="text-terminal-accent">~</span>
-            <span className="hidden sm:inline text-terminal-muted">(zsh)</span>
+            <span className="hidden sm:inline text-terminal-muted text-[11px]">(zsh)</span>
           </div>
         </div>
 
         <div className="flex items-center space-x-3 text-xs">
           <span className="hidden sm:inline text-terminal-muted text-[11px]">
-            Theme: <strong className="text-terminal-accent">{theme}</strong>
+            theme: <strong className="text-terminal-accent">{theme}</strong>
           </span>
 
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 hover:bg-terminal-hover rounded text-terminal-muted hover:text-terminal-text transition-colors flex items-center gap-1"
-            aria-label={soundEnabled ? 'Disable audio feedback' : 'Enable audio feedback'}
+            className="p-1 hover:bg-terminal-hover rounded text-terminal-muted hover:text-terminal-text transition-colors"
             title={soundEnabled ? 'Mute audio' : 'Enable sound'}
           >
             {soundEnabled ? <Volume2 size={14} className="text-terminal-accent" /> : <VolumeX size={14} />}
@@ -182,54 +266,57 @@ export const Terminal: React.FC<TerminalProps> = ({
         </div>
       </div>
 
-      {/* Terminal Output Stream */}
+      {/* Terminal Stream: Output + Inline Active Prompt */}
       <div 
-        ref={outputRef}
-        className="terminal-output flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-track-terminal scrollbar-thumb-terminal-accent"
-        onClick={handleFocus}
-        role="log"
-        aria-live="polite"
-        aria-label="Terminal output"
+        ref={terminalRef}
+        className="terminal-output flex-1 p-3 sm:p-4 overflow-y-auto scrollbar-thin space-y-2"
       >
-        {output.map((line, index) => (
-          <div key={index} className="mb-2">
-            {line}
+        {entries.map(entry => (
+          <div key={entry.id} className="terminal-entry space-y-1">
+            {/* If there was a command associated with this entry, render it permanently */}
+            {entry.command !== undefined && entry.command !== '' && (
+              <div className="flex items-center space-x-2 text-xs sm:text-sm font-mono text-terminal-accent font-bold">
+                <span>sagar@iitb-cse:~$</span>
+                <span className="text-terminal-text font-normal">{entry.command}</span>
+              </div>
+            )}
+
+            {/* If empty command line */}
+            {entry.command === '' && entry.id !== 'init-banner' && (
+              <div className="text-xs sm:text-sm font-mono text-terminal-accent font-bold">
+                <span>sagar@iitb-cse:~$</span>
+              </div>
+            )}
+
+            {/* Output */}
+            {entry.output && (
+              <div className="terminal-result text-xs sm:text-sm">
+                {entry.output}
+              </div>
+            )}
           </div>
         ))}
-        
-        {isProcessing && (
-          <div className="flex items-center space-x-2 my-2 text-terminal-accent text-xs">
-            <TypingAnimation text="Executing command..." />
-            <div className="loading-dots">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-        )}
-      </div>
 
-      {/* Terminal Input Prompt */}
-      <form onSubmit={handleSubmit} className="terminal-input px-4 py-3 border-t border-terminal-border bg-terminal-header/40"> 
-        <div className="flex items-center space-x-2">
-          <span className="text-terminal-accent font-bold text-xs sm:text-sm flex-shrink-0">
+        {/* The Native Active Prompt Line — directly inline below the last output! */}
+        <form onSubmit={handleSubmit} className="terminal-active-line flex items-center space-x-2 pt-1">
+          <span className="text-terminal-accent font-bold text-xs sm:text-sm flex-shrink-0 select-none">
             sagar@iitb-cse:~$
           </span>
-          <ChevronRight size={15} className="text-terminal-accent flex-shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent outline-none text-terminal-text caret-terminal-accent border-none focus:ring-0 focus:outline-none font-mono text-xs sm:text-sm"
-            placeholder="Type 'help' or click any command..."
+            className="flex-1 bg-transparent border-none outline-none text-terminal-text caret-terminal-accent font-mono text-xs sm:text-sm p-0 m-0 focus:ring-0 focus:outline-none"
+            autoFocus
             autoComplete="off"
+            autoCapitalize="off"
             spellCheck="false"
-            aria-label="Command input prompt"
+            aria-label="Active terminal command line"
           />
-        </div> 
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

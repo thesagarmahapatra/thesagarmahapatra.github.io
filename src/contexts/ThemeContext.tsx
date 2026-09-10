@@ -23,12 +23,17 @@ export const themes: ThemeMode[] = [
 ];
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<ThemeMode>('onedark');
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    const savedTheme = localStorage.getItem('terminal-theme') as ThemeMode;
+    return (savedTheme && themes.includes(savedTheme)) ? savedTheme : 'matrix';
+  });
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('terminal-theme') as ThemeMode;
     if (savedTheme && themes.includes(savedTheme)) {
       setTheme(savedTheme);
+    } else {
+      setTheme('matrix');
     }
   }, []);
 

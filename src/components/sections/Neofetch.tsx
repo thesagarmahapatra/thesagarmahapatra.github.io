@@ -19,7 +19,7 @@ export const Neofetch: React.FC = () => {
         {/* Right: System Info */}
         <div className="space-y-1.5 flex-1">
           <div className="text-terminal-accent font-bold text-sm">
-            sagar
+            sagar@iitb
           </div>
           <div className="text-terminal-muted border-b border-terminal-border pb-1">
             -----------------------------------

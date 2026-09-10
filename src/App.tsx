@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Terminal } from './components/Terminal';
 import { StatusBar } from './components/StatusBar';
 import { MobileKeyboard } from './components/MobileKeyboard';
+import { LoadingScreen } from './components/LoadingScreen';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [showMobileKeyboard, setShowMobileKeyboard] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1250);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleMobileKeyPress = (key: string) => {
     const inputElement = document.querySelector('.terminal-active-line input') as HTMLInputElement;
@@ -39,24 +48,28 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-terminal text-terminal-text flex flex-col font-mono selection:bg-terminal-accent selection:text-terminal-bg">
-        {/* Main Terminal Window */}
-        <main className="flex-1 flex flex-col h-[calc(100vh-32px)]">
-          <Terminal />
-        </main>
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
+        <div className="min-h-screen bg-terminal text-terminal-text flex flex-col font-mono selection:bg-terminal-accent selection:text-terminal-bg animate-fade-in">
+          {/* Main Terminal Window */}
+          <main className="flex-1 flex flex-col h-[calc(100vh-32px)]">
+            <Terminal />
+          </main>
 
-        {/* Bottom Status Bar */}
-        <footer className="h-8 flex-shrink-0">
-          <StatusBar />
-        </footer>
+          {/* Bottom Status Bar */}
+          <footer className="h-8 flex-shrink-0">
+            <StatusBar />
+          </footer>
 
-        {/* Mobile Keyboard Bar */}
-        <MobileKeyboard
-          isVisible={showMobileKeyboard}
-          onToggle={() => setShowMobileKeyboard(!showMobileKeyboard)}
-          onKeyPress={handleMobileKeyPress}
-        />
-      </div>
+          {/* Mobile Keyboard Bar */}
+          <MobileKeyboard
+            isVisible={showMobileKeyboard}
+            onToggle={() => setShowMobileKeyboard(!showMobileKeyboard)}
+            onKeyPress={handleMobileKeyPress}
+          />
+        </div>
+      )}
     </ThemeProvider>
   );
 }

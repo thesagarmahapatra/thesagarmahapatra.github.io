@@ -198,6 +198,8 @@ body {
   border-radius: 4px;
   image-rendering: pixelated;
   -webkit-font-smoothing: antialiased;
+  filter: brightness(1.35) contrast(1.15) saturate(1.1);
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {

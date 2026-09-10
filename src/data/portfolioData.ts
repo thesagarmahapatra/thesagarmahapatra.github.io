@@ -64,7 +64,7 @@ export const personalInfo = {
   lab: 'Machine Learning Lab, Dept. of Computer Science & Engineering (CSE)',
   desk: 'Machine Learning Lab / Computer Centre (New CSE Building), IIT Bombay',
   affiliation: 'Affiliated with BharatGen (MeitY, Govt. of India)',
-  academicDept: 'Dept. of Electrical Engineering (EE1: Communications & ML), IIT Bombay',
+  academicDept: 'Dept. of Electrical Engineering (Machine Learning), IIT Bombay',
   cpi: '9.03 / 10.0',
   rank: 'Department Rank 1 (DR 1) in Specialization',
   gate: 'GATE 99+ Percentile in both Data Science & AI (DA) and Computer Science (CS)',
@@ -361,11 +361,11 @@ export const education: EducationItem[] = [
     institution: 'Indian Institute of Technology Bombay (IIT Bombay)',
     period: '2024 – Present',
     degree: 'Master of Technology (M.Tech)',
-    specialization: 'Communications & Machine Learning (EE1)',
+    specialization: 'Machine Learning',
     standing: 'CPI: 9.03 / 10.0 • Department Rank 1 (DR 1) in Specialization',
     department: 'Dept. of Electrical Engineering / Affiliated with Machine Learning Lab, CSE & BharatGen',
     details: [
-      'Awarded Department Rank 1 (DR 1) in EE1 specialization with 9.03 CPI.',
+      'Awarded Department Rank 1 (DR 1) in Machine Learning specialization with 9.03 CPI.',
       'Active research in Machine Learning Lab (CSE) and BharatGen foundational models.',
       'Serving as System Administrator at Computer Centre, New CSE Building.',
       'Key Coursework: Foundations of Machine Learning, Deep Learning for NLP, Speech & NLP, Cryptocurrency & Blockchain, Algorithms & Complexity, Communication Networks, Digital Signal Processing.'
@@ -389,7 +389,7 @@ export const achievements: AchievementItem[] = [
   {
     title: '🥇 Department Rank 1 (DR 1) • CPI: 9.03',
     badge: 'IIT Bombay',
-    description: 'Ranked 1st in Specialization (EE1: Communications & Machine Learning) at IIT Bombay with a cumulative CPI of 9.03 / 10.0.'
+    description: 'Ranked 1st in Specialization (Machine Learning) at IIT Bombay with a cumulative CPI of 9.03 / 10.0.'
   },
   {
     title: '🎯 GATE 99+ Percentile (Dual Qualification)',

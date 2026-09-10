@@ -17,7 +17,7 @@ export const WhoAmI: React.FC<WhoAmIProps> = ({ onRunCommand }) => {
             <h2 className="text-lg font-bold text-terminal-accent">{personalInfo.name}</h2>
           </div>
           <span className="px-2.5 py-1 text-xs rounded bg-terminal-accent/15 text-terminal-accent border border-terminal-accent/30 font-semibold">
-            IIT Bombay • CPI: {personalInfo.cpi} ({personalInfo.rank})
+            IIT Bombay • Systems & ML Researcher
           </span>
         </div>
 
@@ -26,19 +26,17 @@ export const WhoAmI: React.FC<WhoAmIProps> = ({ onRunCommand }) => {
           <p>
             I am a Graduate Student (M.Tech) and Systems/ML Researcher in the{' '}
             <strong className="text-terminal-accent font-semibold">Machine Learning Lab, Dept. of Computer Science & Engineering (CSE)</strong> at{' '}
-            <strong className="text-terminal-accent font-semibold">IIT Bombay</strong>, with academic affiliations across both the{' '}
-            <strong>Department of Computer Science & Engineering</strong> and the{' '}
-            <strong>Department of Electrical Engineering</strong>.
+            <strong className="text-terminal-accent font-semibold">IIT Bombay</strong>, affiliated with{' '}
+            <strong className="text-terminal-accent font-semibold">BharatGen</strong> (National Mission on AI, MeitY).
           </p>
 
           <p>
-            Academically, I hold <strong>Department Rank 1 (DR 1)</strong> in Electrical Engineering (EE1: Communications & Machine Learning) with a{' '}
-            <strong>CPI of 9.03 / 10.0</strong>. I qualified in the <strong>99+ percentile in GATE in both Data Science & AI (DA) and Computer Science & IT (CS)</strong>, and scored <strong>AIR 58 in JEST</strong> (Computer Science) with interview calls from IISc Bangalore (CSA & CDS).
+            <strong>Research & Systems Infrastructure:</strong> My core focus lies at the intersection of high-performance deep learning systems and enterprise-grade computing infrastructure. In the <strong>Machine Learning Lab</strong>, I work on high-throughput LLM inference acceleration — specializing in speculative decoding, multi-token prediction (MTP), and KV-cache compression. Concurrently, as a System Administrator at the <strong>Computer Centre (CC)</strong> in the New CSE Building, I architect and maintain mission-critical campus infrastructure, including high-availability mail clusters safeguarding 20,000+ accounts, sub-millisecond Redis rate-limiting/telemetry daemons, and compute nodes.
           </p>
 
           <p>
-            <strong>Research & Infrastructure Base:</strong> I conduct research out of the <strong>Machine Learning Lab</strong> (CSE) and serve as System Administrator at the{' '}
-            <strong>Computer Centre (CC)</strong> in the New CSE Building. My research is centered on high-performance LLM inference acceleration (speculative decoding, multi-token prediction, KV-cache compression), sovereign speech-LLMs with <strong>BharatGen</strong>, and high-availability enterprise campus computing infrastructure.
+            <strong>Academic Background & Honors:</strong> On the academic side, I hold <strong>Department Rank 1 (DR 1)</strong> in Machine Learning with a{' '}
+            <strong>CPI of 9.03 / 10.0</strong> at IIT Bombay. Nationally, I qualified in the <strong>99+ percentile in GATE</strong> in both Data Science & AI (DA) and Computer Science & IT (CS), and secured <strong>AIR 58 in JEST</strong> (Computer Science) with interview calls from IISc Bangalore (CSA & CDS).
           </p>
         </div>
 

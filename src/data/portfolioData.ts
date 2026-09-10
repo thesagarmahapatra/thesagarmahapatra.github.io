@@ -64,7 +64,7 @@ export const personalInfo = {
   lab: 'Machine Learning Lab, Dept. of Computer Science & Engineering (CSE)',
   desk: 'Machine Learning Lab / Computer Centre (New CSE Building), IIT Bombay',
   affiliation: 'Affiliated with BharatGen (MeitY, Govt. of India)',
-  academicDept: 'Dept. of Electrical Engineering (Machine Learning), IIT Bombay',
+  academicDept: 'Dept. of Electrical Engineering (Communication Systems & Machine Learning), IIT Bombay',
   cpi: '9.03 / 10.0',
   rank: 'Department Rank 1 (DR 1) in Specialization',
   gate: 'GATE 99+ Percentile in both Data Science & AI (DA) and Computer Science (CS)',
@@ -285,13 +285,13 @@ export const experience: ExperienceItem[] = [
   },
   {
     id: 'iitb-cc',
-    role: 'Campus Mail Infrastructure & Systems Administrator',
+    role: 'Systems Administrator — Enterprise Campus Servers (HPC/Mail)',
     organization: 'Computer Centre, IIT Bombay',
     period: 'Jul 2024 – Present',
     location: 'Computer Centre, New CSE Building, IIT Bombay',
     technologies: ['Enterprise Postfix', 'Redis', 'Proxmox MG', 'ClamAV', 'SpamAssassin', 'Ansible', 'SLURM'],
     points: [
-      'Architected HA mail cluster (IronGateway PMG) with automatic failover, serving 20,000+ campus accounts.',
+      'Architected HA cluster (IronGateway PMG) for Enterprise Campus Servers (HPC/Mail) with automatic failover, serving 20,000+ campus accounts.',
       'Engineered sub-ms Redis rate-limiting daemon with zero-data-loss Postfix HOLD queue containment.',
       'Built async Redis streaming pipeline, cutting telemetry latency from 3.8s to <12ms.',
       'Automated compromised account isolation and spool freezing with ClamAV and SpamAssassin.',
@@ -361,13 +361,13 @@ export const education: EducationItem[] = [
     institution: 'Indian Institute of Technology Bombay (IIT Bombay)',
     period: '2024 – Present',
     degree: 'Master of Technology (M.Tech)',
-    specialization: 'Machine Learning',
+    specialization: 'Communication Systems and Machine Learning',
     standing: 'CPI: 9.03 / 10.0 • Department Rank 1 (DR 1) in Specialization',
     department: 'Dept. of Electrical Engineering / Affiliated with Machine Learning Lab, CSE & BharatGen',
     details: [
-      'Awarded Department Rank 1 (DR 1) in Machine Learning specialization with 9.03 CPI.',
+      'Awarded Department Rank 1 (DR 1) in Communication Systems and Machine Learning with 9.03 CPI.',
       'Active research in Machine Learning Lab (CSE) and BharatGen foundational models.',
-      'Serving as System Administrator at Computer Centre, New CSE Building.',
+      'Serving as System Administrator for Enterprise Campus Servers (HPC/Mail) at Computer Centre, New CSE Building.',
       'Key Coursework: Foundations of Machine Learning, Deep Learning for NLP, Speech & NLP, Cryptocurrency & Blockchain, Algorithms & Complexity, Communication Networks, Digital Signal Processing.'
     ]
   },
@@ -389,7 +389,7 @@ export const achievements: AchievementItem[] = [
   {
     title: '🥇 Department Rank 1 (DR 1) • CPI: 9.03',
     badge: 'IIT Bombay',
-    description: 'Ranked 1st in Specialization (Machine Learning) at IIT Bombay with a cumulative CPI of 9.03 / 10.0.'
+    description: 'Ranked 1st in Specialization (Communication Systems and Machine Learning) at IIT Bombay with a cumulative CPI of 9.03 / 10.0.'
   },
   {
     title: '🎯 GATE 99+ Percentile (Dual Qualification)',

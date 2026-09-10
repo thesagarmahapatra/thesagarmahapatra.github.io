@@ -22,7 +22,7 @@ export const Education: React.FC = () => {
                   {item.institution}
                 </h3>
                 <div className="text-xs text-terminal-text font-semibold">
-                  {item.degree} • {item.specialization}
+                  {item.degree} in {item.specialization}
                 </div>
               </div>
 

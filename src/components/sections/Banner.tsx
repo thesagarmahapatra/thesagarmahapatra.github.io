@@ -53,14 +53,14 @@ export const Banner: React.FC<BannerProps> = ({ onRunCommand }) => {
               Graduate Student (M.Tech) & Systems/ML Researcher in the{' '}
               <strong className="text-terminal-accent font-semibold">Machine Learning Lab, Dept. of Computer Science & Engineering</strong> at{' '}
               <strong className="text-terminal-accent font-semibold">IIT Bombay</strong>, affiliated with{' '}
-              <strong className="text-terminal-accent font-semibold">BharatGen</strong> (MeitY). Focused on LLM inference acceleration, speculative decoding (EAGLE/MTP), and enterprise campus mail systems.
+              <strong className="text-terminal-accent font-semibold">BharatGen</strong> (MeitY). Focused on LLM inference acceleration, speculative decoding (EAGLE/MTP), and Enterprise Campus Servers (HPC/Mail).
             </p>
 
             {/* Core Work, College, Research, Codeforces, Location details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-terminal-muted pt-0.5">
               <div className="flex items-center gap-1.5">
                 <Terminal size={13} className="text-terminal-accent flex-shrink-0" />
-                <span>Work: Campus Mail SysAdmin (Computer Centre)</span>
+                <span>Work: Enterprise Campus Servers (HPC/Mail) SysAdmin (Computer Centre)</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Building2 size={13} className="text-terminal-accent flex-shrink-0" />

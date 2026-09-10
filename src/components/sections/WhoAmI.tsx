@@ -31,11 +31,11 @@ export const WhoAmI: React.FC<WhoAmIProps> = ({ onRunCommand }) => {
           </p>
 
           <p>
-            <strong>Research & Systems Infrastructure:</strong> My core focus lies at the intersection of high-performance deep learning systems and enterprise-grade computing infrastructure. In the <strong>Machine Learning Lab</strong>, I work on high-throughput LLM inference acceleration — specializing in speculative decoding, multi-token prediction (MTP), and KV-cache compression. Concurrently, as a System Administrator at the <strong>Computer Centre (CC)</strong> in the New CSE Building, I architect and maintain mission-critical campus infrastructure, including high-availability mail clusters safeguarding 20,000+ accounts, sub-millisecond Redis rate-limiting/telemetry daemons, and compute nodes.
+            <strong>Research & Systems Infrastructure:</strong> My core focus lies at the intersection of high-performance deep learning systems and enterprise-grade computing infrastructure. In the <strong>Machine Learning Lab</strong>, I work on high-throughput LLM inference acceleration — specializing in speculative decoding, multi-token prediction (MTP), and KV-cache compression. Concurrently, as a System Administrator at the <strong>Computer Centre (CC)</strong> in the New CSE Building, I architect and maintain mission-critical infrastructure, including Enterprise Campus Servers (HPC/Mail) safeguarding 20,000+ accounts, sub-millisecond Redis rate-limiting/telemetry daemons, and compute nodes.
           </p>
 
           <p>
-            <strong>Academic Background & Honors:</strong> On the academic side, I hold <strong>Department Rank 1 (DR 1)</strong> in Machine Learning with a{' '}
+            <strong>Academic Background & Honors:</strong> On the academic side, I hold <strong>Department Rank 1 (DR 1)</strong> in Communication Systems and Machine Learning with a{' '}
             <strong>CPI of 9.03 / 10.0</strong> at IIT Bombay. Nationally, I qualified in the <strong>99+ percentile in GATE</strong> in both Data Science & AI (DA) and Computer Science & IT (CS), and secured <strong>AIR 58 in JEST</strong> (Computer Science) with interview calls from IISc Bangalore (CSA & CDS).
           </p>
         </div>
@@ -55,10 +55,10 @@ export const WhoAmI: React.FC<WhoAmIProps> = ({ onRunCommand }) => {
 
           <div className="p-3 rounded bg-terminal/60 border border-terminal-border/80 space-y-1.5 text-xs">
             <div className="flex items-center gap-1.5 text-terminal-accent font-semibold">
-              <Terminal size={14} /> Campus SysAdmin & Engineering
+              <Terminal size={14} /> Enterprise Campus Servers (HPC/Mail)
             </div>
             <p className="text-terminal-muted leading-relaxed">
-              • High-Availability Postfix Mail Cluster safeguarding 20,000+ accounts<br />
+              • Enterprise Campus Servers (HPC/Mail) safeguarding 20,000+ accounts<br />
               • Sub-millisecond Redis Rate-Limiting & telemetry streaming daemons<br />
               • ClamAV, SpamAssassin, SLURM cluster node configuration
             </p>

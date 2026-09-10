@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Terminal as TerminalIcon, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { Terminal as TerminalIcon, Volume2, VolumeX, Palette, Maximize2, Minimize2 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSound } from '../hooks/useSound';
 import { CommandProcessor } from './CommandProcessor';
@@ -17,6 +17,7 @@ export const Terminal: React.FC = () => {
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,12 +55,12 @@ export const Terminal: React.FC = () => {
   // Keep focus on input
   useEffect(() => {
     inputRef.current?.focus();
-  }, [entries]);
+  }, [entries, isMaximized]);
 
   const runCommand = useCallback((cmdString: string) => {
     const trimmed = cmdString.trim();
     if (!trimmed) {
-      // Empty enter pressed: just add an empty prompt line like a real shell
+      // Empty enter pressed: add empty prompt line
       setEntries(prev => [
         ...prev,
         { id: `empty-${Date.now()}`, command: '', output: null }
@@ -169,7 +170,6 @@ export const Terminal: React.FC = () => {
       if (matches.length === 1) {
         setInput(rest.length > 0 ? `${matches[0]} ${rest.join(' ')}` : matches[0]);
       } else if (matches.length > 1) {
-        // common prefix
         let prefix = matches[0];
         for (let i = 1; i < matches.length; i++) {
           let j = 0;
@@ -189,7 +189,6 @@ export const Terminal: React.FC = () => {
     }
   };
 
-  // Clicking anywhere on the terminal window focuses the prompt
   const handleWindowClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const isInteractive = target.closest('button, a, input, textarea, select, [role="button"]');
@@ -215,9 +214,24 @@ export const Terminal: React.FC = () => {
     setInput('');
   };
 
+  const handleMaximize = () => {
+    setIsMaximized(prev => !prev);
+    try {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.().catch(() => {});
+      } else {
+        document.exitFullscreen?.().catch(() => {});
+      }
+    } catch (e) {}
+  };
+
   return (
     <div 
-      className="terminal-container h-full flex flex-col bg-terminal text-terminal-text font-mono select-text"
+      className={`terminal-container flex flex-col bg-terminal text-terminal-text font-mono select-text transition-all ${
+        isMaximized 
+          ? 'fixed inset-0 z-50 w-screen h-screen m-0 rounded-none border-none' 
+          : 'h-full'
+      }`}
       onClick={handleWindowClick}
     >
       {/* Top Window Bar */}
@@ -227,18 +241,18 @@ export const Terminal: React.FC = () => {
           <div className="flex space-x-1.5 mr-2">
             <button
               onClick={handleReset}
-              className="w-3 h-3 rounded-full bg-[#ff5f56] hover:opacity-80 transition-opacity"
+              className="w-3 h-3 rounded-full bg-[#ff5f56] hover:opacity-80 transition-opacity cursor-pointer"
               title="Reset Terminal Session"
             />
             <button
               onClick={handleClear}
-              className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:opacity-80 transition-opacity"
+              className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:opacity-80 transition-opacity cursor-pointer"
               title="Clear Buffer (Ctrl+L)"
             />
             <button
-              onClick={toggleTheme}
-              className="w-3 h-3 rounded-full bg-[#27c93f] hover:opacity-80 transition-opacity"
-              title="Toggle Color Theme"
+              onClick={handleMaximize}
+              className="w-3 h-3 rounded-full bg-[#27c93f] hover:opacity-80 transition-opacity cursor-pointer"
+              title={isMaximized ? "Restore Window Size" : "Maximize Terminal / Fullscreen"}
             />
           </div>
 
@@ -252,13 +266,19 @@ export const Terminal: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-3 text-xs">
-          <span className="hidden sm:inline text-terminal-muted text-[11px]">
-            theme: <strong className="text-terminal-accent">{theme}</strong>
-          </span>
+          {/* Dedicated Theme Switcher in Header */}
+          <button
+            onClick={toggleTheme}
+            className="hover:bg-terminal-hover px-2 py-0.5 rounded text-terminal-muted hover:text-terminal-text transition-colors flex items-center gap-1.5 cursor-pointer border border-terminal-border/50"
+            title="Click to cycle theme (or type: theme [name])"
+          >
+            <Palette size={12} className="text-terminal-accent" />
+            <span className="text-[11px] font-mono">theme: <strong className="text-terminal-accent">{theme}</strong></span>
+          </button>
 
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 hover:bg-terminal-hover rounded text-terminal-muted hover:text-terminal-text transition-colors"
+            className="p-1 hover:bg-terminal-hover rounded text-terminal-muted hover:text-terminal-text transition-colors cursor-pointer"
             title={soundEnabled ? 'Mute audio' : 'Enable sound'}
           >
             {soundEnabled ? <Volume2 size={14} className="text-terminal-accent" /> : <VolumeX size={14} />}
@@ -273,7 +293,7 @@ export const Terminal: React.FC = () => {
       >
         {entries.map(entry => (
           <div key={entry.id} className="terminal-entry space-y-1">
-            {/* If there was a command associated with this entry, render it permanently */}
+            {/* Command history line */}
             {entry.command !== undefined && entry.command !== '' && (
               <div className="flex items-center space-x-2 text-xs sm:text-sm font-mono text-terminal-accent font-bold">
                 <span>sagar@iitb-cse:~$</span>
@@ -281,7 +301,7 @@ export const Terminal: React.FC = () => {
               </div>
             )}
 
-            {/* If empty command line */}
+            {/* Empty command line */}
             {entry.command === '' && entry.id !== 'init-banner' && (
               <div className="text-xs sm:text-sm font-mono text-terminal-accent font-bold">
                 <span>sagar@iitb-cse:~$</span>
@@ -297,7 +317,7 @@ export const Terminal: React.FC = () => {
           </div>
         ))}
 
-        {/* The Native Active Prompt Line — directly inline below the last output! */}
+        {/* The Native Active Prompt Line */}
         <form onSubmit={handleSubmit} className="terminal-active-line flex items-center space-x-2 pt-1">
           <span className="text-terminal-accent font-bold text-xs sm:text-sm flex-shrink-0 select-none">
             sagar@iitb-cse:~$

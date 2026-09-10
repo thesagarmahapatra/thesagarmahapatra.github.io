@@ -25,10 +25,10 @@ export const Projects: React.FC<ProjectsProps> = ({ onRunCommand }) => {
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-2 py-0.5 rounded border transition-colors ${
+              className={`px-2.5 py-0.5 rounded text-xs transition-all ${
                 filter === cat
-                  ? 'bg-terminal-accent text-terminal-bg border-terminal-accent font-semibold'
-                  : 'bg-terminal-hover text-terminal-muted border-terminal-border hover:text-terminal-accent'
+                  ? 'bg-terminal-accent/25 text-terminal-accent border border-terminal-accent font-bold ring-1 ring-terminal-accent shadow-sm'
+                  : 'bg-terminal-hover text-terminal-muted border border-terminal-border hover:text-terminal-accent hover:border-terminal-accent/50'
               }`}
             >
               {cat.toUpperCase()}

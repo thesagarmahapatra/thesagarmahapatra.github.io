@@ -61,8 +61,8 @@ export interface AchievementItem {
 export const personalInfo = {
   name: 'Sagar Swaraj Mahapatra',
   title: 'Graduate Student (M.Tech) & Systems/ML Researcher',
-  lab: 'AI, Dept. of Computer Science & Engineering',
-  desk: 'AI / Computer Centre (New CSE Building), IIT Bombay',
+  lab: 'Machine Learning Lab, Dept. of Computer Science & Engineering (CSE)',
+  desk: 'Machine Learning Lab / Computer Centre (New CSE Building), IIT Bombay',
   affiliation: 'Affiliated with BharatGen (MeitY, Govt. of India)',
   academicDept: 'Dept. of Electrical Engineering (Communication Systems & Machine Learning), IIT Bombay',
   cpi: '9.03 / 10.0',
@@ -232,7 +232,7 @@ export const researchProjects: ResearchItem[] = [
     id: 'speculative-decoding',
     title: 'Speculative Decoding & Multi-Token Drafting for LLMs',
     period: '2024 – Present',
-    affiliation: 'AI, IIT Bombay • Affiliated with BharatGen',
+    affiliation: 'Machine Learning Lab, CSE, IIT Bombay • Affiliated with BharatGen',
     tags: ['LLM Inference', 'Speculative Decoding', 'EAGLE', 'MTP', 'MoE Optimization'],
     points: [
       'Implemented Speculative Decoding, Multi-Token Prediction (MTP), and EAGLE architectures on Param 1 and Param 2 models of BharatGen (India\'s Foundational LLMs).',
@@ -363,10 +363,10 @@ export const education: EducationItem[] = [
     degree: 'Master of Technology (M.Tech)',
     specialization: 'Communication Systems and Machine Learning',
     standing: 'CPI: 9.03 / 10.0 • Department Rank 1 (DR 1) in Specialization',
-    department: 'Dept. of Electrical Engineering & Computer Science / AI & BharatGen',
+    department: 'Dept. of Electrical Engineering / Affiliated with Machine Learning Lab, CSE & BharatGen',
     details: [
       'Awarded Department Rank 1 (DR 1) in Communication Systems and Machine Learning with 9.03 CPI.',
-      'Active research in AI and BharatGen foundational models across EE & CSE.',
+      'Active research in Machine Learning Lab (CSE) and BharatGen foundational models.',
       'Serving as System Administrator for Enterprise Campus Servers (HPC/Mail) at Computer Centre, New CSE Building.',
       'Key Coursework: Foundations of Machine Learning, Deep Learning for NLP, Speech & NLP, Cryptocurrency & Blockchain, Algorithms & Complexity, Communication Networks, Digital Signal Processing.'
     ]

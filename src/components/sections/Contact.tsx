@@ -70,7 +70,7 @@ export const Contact: React.FC = () => {
             <div className="flex items-start gap-2">
               <MapPin size={14} className="text-terminal-accent mt-0.5 flex-shrink-0" />
               <span>
-                <strong>Research & Systems:</strong> AI / Computer Centre, New CSE Building, IIT Bombay, Powai, Mumbai 400076, India
+                <strong>Research Lab:</strong> Machine Learning Lab, Dept. of Computer Science & Engineering / Computer Centre, New CSE Building, IIT Bombay, Powai, Mumbai 400076, India
               </span>
             </div>
           </div>

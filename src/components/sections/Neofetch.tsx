@@ -38,8 +38,8 @@ export const Neofetch: React.FC = () => {
             <span className="text-terminal-accent font-semibold">Role:</span>
             <span className="text-terminal-text">{personalInfo.title}</span>
 
-            <span className="text-terminal-accent font-semibold">Affiliations:</span>
-            <span className="text-terminal-text">EE & CSE • AI • BharatGen</span>
+            <span className="text-terminal-accent font-semibold">Academic Lab:</span>
+            <span className="text-terminal-text">Machine Learning Lab, CSE / BharatGen</span>
 
             <span className="text-terminal-accent font-semibold">CPI / Rank:</span>
             <span className="text-terminal-success font-semibold">{personalInfo.cpi} • {personalInfo.rank}</span>

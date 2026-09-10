@@ -23,7 +23,7 @@ export const Help: React.FC<HelpProps> = ({ onRunCommand }) => {
     { cmd: 'clear', desc: 'Clear the terminal screen buffer (or Ctrl+L)' },
     { cmd: 'whoami', desc: 'Display active user and role metadata' },
     { cmd: 'date', desc: 'Print current system time and date' },
-    { cmd: 'sudo', desc: 'Execute superuser command (Easter egg)' }
+    { cmd: 'sudo', desc: 'Execute superuser command (Easter egg: Claude\'s Plan)' }
   ];
 
   return (

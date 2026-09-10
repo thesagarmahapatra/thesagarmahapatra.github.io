@@ -273,7 +273,7 @@ export const experience: ExperienceItem[] = [
     role: 'AI Engineer Intern',
     organization: 'BharatGen (MeitY, Govt. of India)',
     period: 'May 2026 – Present',
-    location: 'IIT Bombay Machine Learning Lab',
+    location: 'BharatGen, Mumbai',
     technologies: ['Python', 'PyTorch', 'Ray', 'NVIDIA Triton', 'CTranslate2', 'Whisper', 'AWS SageMaker'],
     points: [
       'Implemented Speculative Decoding, MTP, and EAGLE drafting on Param 1 and Param 2 models of BharatGen (India\'s Foundational LLMs).',

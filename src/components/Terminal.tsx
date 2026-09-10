@@ -258,7 +258,7 @@ export const Terminal: React.FC = () => {
 
           <div className="flex items-center gap-1.5 text-xs text-terminal-muted font-semibold">
             <TerminalIcon size={14} className="text-terminal-accent" />
-            <span className="text-terminal-text font-bold">sagar@iitb-cse</span>
+            <span className="text-terminal-text font-bold">sagar</span>
             <span>:</span>
             <span className="text-terminal-accent">~</span>
             <span className="hidden sm:inline text-terminal-muted text-[11px]">(zsh)</span>
@@ -296,7 +296,7 @@ export const Terminal: React.FC = () => {
             {/* Command history line */}
             {entry.command !== undefined && entry.command !== '' && (
               <div className="flex items-center space-x-2 text-xs sm:text-sm font-mono text-terminal-accent font-bold">
-                <span>sagar@iitb-cse:~$</span>
+                <span>sagar:~$</span>
                 <span className="text-terminal-text font-normal">{entry.command}</span>
               </div>
             )}
@@ -304,7 +304,7 @@ export const Terminal: React.FC = () => {
             {/* Empty command line */}
             {entry.command === '' && entry.id !== 'init-banner' && (
               <div className="text-xs sm:text-sm font-mono text-terminal-accent font-bold">
-                <span>sagar@iitb-cse:~$</span>
+                <span>sagar:~$</span>
               </div>
             )}
 
@@ -320,7 +320,7 @@ export const Terminal: React.FC = () => {
         {/* The Native Active Prompt Line */}
         <form onSubmit={handleSubmit} className="terminal-active-line flex items-center space-x-2 pt-1">
           <span className="text-terminal-accent font-bold text-xs sm:text-sm flex-shrink-0 select-none">
-            sagar@iitb-cse:~$
+            sagar:~$
           </span>
           <input
             ref={inputRef}

@@ -29,7 +29,7 @@ export const StatusBar: React.FC = () => {
         {/* Left side - System info */}
         <div className="flex items-center space-x-3 sm:space-x-4">
           <div className="flex items-center space-x-1">
-            <span className="text-terminal-accent font-semibold">sagar@iitb-cse</span>
+            <span className="text-terminal-accent font-semibold">sagar</span>
             <span className="text-terminal-muted">:</span>
             <span className="text-terminal-text">~$</span>
           </div>

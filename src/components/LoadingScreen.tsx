@@ -42,7 +42,7 @@ export const LoadingScreen: React.FC = () => {
         {/* Boot Sequence */}
         <div className="mb-6 text-left bg-terminal-hover p-5 rounded-lg border border-terminal-border">
           <div className="text-terminal-accent mb-3 font-bold font-mono text-sm">
-            sagar@iitb-cse:~$ boot --verbose --session=visitor
+            sagar:~$ boot --verbose --session=visitor
           </div>
           <div className="space-y-1 text-xs font-mono">
             {bootText.map((text, index) => (

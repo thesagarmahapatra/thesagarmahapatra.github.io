@@ -293,39 +293,45 @@ export const Terminal: React.FC = () => {
       {/* Terminal Stream: Output + Inline Active Prompt */}
       <div 
         ref={terminalRef}
-        className="terminal-output flex-1 p-3 sm:p-4 overflow-y-auto scrollbar-thin space-y-2"
+        className="terminal-output flex-1 p-3 sm:p-4 overflow-y-auto scrollbar-thin flex flex-col-reverse md:flex-col"
       >
-        {entries.map(entry => (
-          <div key={entry.id} className="terminal-entry space-y-1">
-            {/* Command history line */}
-            {entry.command !== undefined && entry.command !== '' && (
-              <div className="flex items-center space-x-2 text-xs sm:text-sm font-mono text-terminal-accent font-bold">
-                <span>sagar@iitb:~$</span>
-                <span className="text-terminal-text font-normal">{entry.command}</span>
-              </div>
-            )}
+        {/* On mobile (flex-col-reverse): prompt renders visually at top, output below */}
+        {/* On desktop (flex-col): normal order — output then prompt at bottom */}
 
-            {/* Empty command line */}
-            {entry.command === '' && entry.id !== 'init-banner' && (
-              <div className="text-xs sm:text-sm font-mono text-terminal-accent font-bold">
-                <span>sagar@iitb:~$</span>
-              </div>
-            )}
+        {/* Output entries wrapper */}
+        <div className="space-y-2 order-2 md:order-1">
+          {entries.map(entry => (
+            <div key={entry.id} className="terminal-entry space-y-1">
+              {/* Command history line */}
+              {entry.command !== undefined && entry.command !== '' && (
+                <div className="flex items-center space-x-2 text-xs sm:text-sm font-mono text-terminal-accent font-bold">
+                  <span>sagar@iitb:~$</span>
+                  <span className="text-terminal-text font-normal">{entry.command}</span>
+                </div>
+              )}
 
-            {/* Output */}
-            {entry.output && (
-              <div className="terminal-result text-xs sm:text-sm">
-                {entry.output}
-              </div>
-            )}
-          </div>
-        ))}
+              {/* Empty command line */}
+              {entry.command === '' && entry.id !== 'init-banner' && (
+                <div className="text-xs sm:text-sm font-mono text-terminal-accent font-bold">
+                  <span>sagar@iitb:~$</span>
+                </div>
+              )}
+
+              {/* Output */}
+              {entry.output && (
+                <div className="terminal-result text-xs sm:text-sm">
+                  {entry.output}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* The Native Active Prompt Line */}
         <form 
           onSubmit={handleSubmit} 
           onClick={() => inputRef.current?.focus({ preventScroll: true })}
-          className="terminal-active-line flex items-center space-x-2 pt-1 cursor-text"
+          className="terminal-active-line flex items-center space-x-2 pt-1 pb-2 md:pb-0 cursor-text order-1 md:order-2 sticky top-0 md:static bg-terminal z-10 md:z-auto border-b md:border-b-0 border-terminal-border/40"
         >
           <span className="text-terminal-accent font-bold text-xs sm:text-sm flex-shrink-0 select-none">
             sagar@iitb:~$

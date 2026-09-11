@@ -59,7 +59,7 @@ export const Banner: React.FC<BannerProps> = ({ onRunCommand }) => {
               Graduate Student (M.Tech) & Systems/ML Researcher in the{' '}
               <strong className="text-terminal-accent font-semibold">Machine Learning Lab, Dept. of Computer Science & Engineering</strong> at{' '}
               <strong className="text-terminal-accent font-semibold">IIT Bombay</strong>, affiliated with{' '}
-              <strong className="text-terminal-accent font-semibold">BharatGen</strong> (MeitY). Focused on LLM inference acceleration, speculative decoding (EAGLE/MTP), and Enterprise Campus Servers (HPC/Mail).
+              <strong className="text-terminal-accent font-semibold">BharatGen</strong> (MeitY). Focused on LLM inference acceleration, speculative decoding, and Enterprise Campus Servers (HPC/Mail).
             </p>
 
             {/* Core Work, College, Research, Codeforces, Location details */}

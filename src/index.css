@@ -153,6 +153,7 @@ button, input, a, .click-cmd {
 .bg-terminal { background-color: var(--terminal-bg); }
 .bg-terminal-header { background-color: var(--terminal-header); }
 .bg-terminal-hover { background-color: var(--terminal-hover); }
+.bg-terminal-accent { background-color: var(--terminal-accent); }
 
 .text-terminal-text { color: var(--terminal-text); }
 .text-terminal-accent { color: var(--terminal-accent); }

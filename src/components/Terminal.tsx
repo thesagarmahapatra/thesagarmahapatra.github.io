@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Terminal as TerminalIcon, Volume2, VolumeX, Palette, Maximize2, Minimize2 } from 'lucide-react';
+import { Terminal as TerminalIcon, Volume2, VolumeX, Palette, Maximize2, Minimize2, FileText, ExternalLink } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useSound } from '../hooks/useSound';
 import { CommandProcessor } from './CommandProcessor';
@@ -29,7 +29,8 @@ export const Terminal: React.FC = () => {
     'research', 'skills', 'education', 'achievements', 'photo', 
     'ascii', 'portrait', 'neofetch', 'contact', 'email', 'socials', 
     'theme', 'clear', 'banner', 'date', 'sudo',
-    'vi', 'vim', 'nvim', 'nano', 'vscode', 'code'
+    'vi', 'vim', 'nvim', 'nano', 'vscode', 'code',
+    'classic', 'academic', 'homepage'
   ];
 
   // Initialize with the Welcome Banner
@@ -269,7 +270,20 @@ export const Terminal: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-3 text-xs">
+        <div className="flex items-center space-x-2 sm:space-x-3 text-xs">
+          {/* Classic View Link for HR / Non-tech visitors */}
+          <a
+            href="https://homepages.iitb.ac.in/~24m1076/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:bg-terminal-hover px-2 py-0.5 rounded text-terminal-accent hover:text-terminal-text transition-colors flex items-center gap-1.5 cursor-pointer border border-terminal-border/60 hover:border-terminal-accent/50 text-[11px] font-mono"
+            title="Prefer a classic document view? Visit Sagar's Academic Homepage"
+          >
+            <FileText size={12} className="text-terminal-accent" />
+            <span className="hidden sm:inline">Classic View</span>
+            <ExternalLink size={10} className="text-terminal-muted hidden sm:inline" />
+          </a>
+
           {/* Dedicated Theme Switcher in Header */}
           <button
             onClick={toggleTheme}

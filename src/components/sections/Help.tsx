@@ -20,6 +20,7 @@ export const Help: React.FC<HelpProps> = ({ onRunCommand }) => {
     { cmd: 'contact', desc: 'IITB email, GitHub, LinkedIn, and lab address' },
     { cmd: 'theme [name]', desc: 'Change theme (onedark, dracula, matrix, nord, gruvbox, amber, blue, white)' },
     { cmd: 'banner', desc: 'Display initial welcome banner and portrait' },
+    { cmd: 'classic', desc: 'Prefer a classic document view? Visit Sagar’s IITB academic homepage' },
     { cmd: 'clear', desc: 'Clear the terminal screen buffer (or Ctrl+L)' },
     { cmd: 'whoami', desc: 'Display active user and role metadata' },
     { cmd: 'date', desc: 'Print current system time and date' },

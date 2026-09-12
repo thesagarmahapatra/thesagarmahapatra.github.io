@@ -1,4 +1,5 @@
 import React from 'react';
+import { FileText, ExternalLink } from 'lucide-react';
 import { projects } from '../data/portfolioData';
 import { useTheme, ThemeMode } from '../contexts/ThemeContext';
 import { Banner } from './sections/Banner';
@@ -42,6 +43,38 @@ export const CommandProcessor: React.FC<CommandProcessorProps> = ({
       case 'welcome':
       case 'start':
         return <Banner onRunCommand={onRunCommand} />;
+
+      case 'classic':
+      case 'classicview':
+      case 'homepage':
+      case 'doc':
+      case 'cv':
+      case 'webpage':
+        return (
+          <div className="p-3.5 rounded bg-terminal-hover border border-terminal-border/80 space-y-2.5 max-w-xl font-mono text-xs sm:text-sm">
+            <div className="flex items-center gap-2 text-terminal-accent font-bold">
+              <FileText size={16} />
+              <span>Sagar Mahapatra — Academic Homepage (Classic Document View)</span>
+            </div>
+            <p className="text-terminal-text leading-relaxed">
+              Prefer a classic document view? Visit:
+            </p>
+            <div className="p-2 rounded bg-terminal/70 border border-terminal-border">
+              <a
+                href="https://homepages.iitb.ac.in/~24m1076/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-terminal-accent underline font-semibold hover:text-terminal-text flex items-center gap-1.5 break-all"
+              >
+                <span>https://homepages.iitb.ac.in/~24m1076/</span>
+                <ExternalLink size={13} className="flex-shrink-0" />
+              </a>
+            </div>
+            <div className="text-[11px] text-terminal-muted">
+              Redirects to Sagar&apos;s formal academic webpage at IIT Bombay featuring a conventional CV layout, publications, and background.
+            </div>
+          </div>
+        );
 
       case 'whoami':
       case 'about':

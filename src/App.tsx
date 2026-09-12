@@ -4,6 +4,7 @@ import { Terminal } from './components/Terminal';
 import { StatusBar } from './components/StatusBar';
 import { MobileKeyboard } from './components/MobileKeyboard';
 import { LoadingScreen } from './components/LoadingScreen';
+import { ClassicViewNotice } from './components/ClassicViewNotice';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +52,10 @@ function App() {
       {isLoading ? (
         <LoadingScreen />
       ) : (
-        <div className="min-h-screen bg-terminal text-terminal-text flex flex-col font-mono selection:bg-terminal-accent selection:text-terminal-bg animate-fade-in">
+        <div className="min-h-screen bg-terminal text-terminal-text flex flex-col font-mono selection:bg-terminal-accent selection:text-terminal-bg animate-fade-in relative">
+          {/* Floating Classic Document View Notice & Toggle */}
+          <ClassicViewNotice />
+
           {/* Main Terminal Window */}
           <main className="flex-1 flex flex-col h-[calc(100vh-32px)]">
             <Terminal />

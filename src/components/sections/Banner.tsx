@@ -1,7 +1,7 @@
 import React from 'react';
 import { ASCII_PORTRAIT } from '../../data/asciiPortrait';
 import { personalInfo } from '../../data/portfolioData';
-import { Terminal, Award, BookOpen, MapPin, Building2, Cpu, FileText, ExternalLink } from 'lucide-react';
+import { Terminal, Award, BookOpen, MapPin, Building2, Cpu } from 'lucide-react';
 
 interface BannerProps {
   onRunCommand?: (cmd: string) => void;
@@ -86,41 +86,13 @@ export const Banner: React.FC<BannerProps> = ({ onRunCommand }) => {
               </div>
             </div>
 
-            {/* Classic Document View Callout for HR / Recruiters */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 sm:p-2.5 rounded bg-terminal-accent/10 border border-terminal-accent/30 text-xs">
-              <div className="flex items-center gap-2">
-                <FileText size={15} className="text-terminal-accent flex-shrink-0" />
-                <div className="text-terminal-text">
-                  <span className="font-semibold text-terminal-accent">Prefer a classic document view?</span>{' '}
-                  <span className="text-terminal-muted">Visit: </span>
-                  <a
-                    href="https://homepages.iitb.ac.in/~24m1076/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-terminal-accent font-semibold underline hover:text-terminal-text break-all"
-                  >
-                    https://homepages.iitb.ac.in/~24m1076/
-                  </a>
-                </div>
-              </div>
-              <a
-                href="https://homepages.iitb.ac.in/~24m1076/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded bg-terminal-accent text-terminal-bg font-bold text-xs hover:opacity-90 transition-opacity flex items-center gap-1 flex-shrink-0 self-start sm:self-center cursor-pointer shadow-sm"
-              >
-                <span>Academic Site</span>
-                <ExternalLink size={12} />
-              </a>
-            </div>
-
             {/* Interactive Commands Bar */}
             <div className="pt-2 border-t border-terminal-border/60">
               <div className="text-[11px] text-terminal-muted mb-1.5">
                 Type <span className="text-terminal-success font-bold">help</span> or click any command to execute:
               </div>
               <div className="flex flex-wrap gap-1.5 text-xs">
-                {['about', 'projects', 'experience', 'research', 'classic', 'sudo', 'vim', 'skills', 'education', 'achievements', 'photo', 'neofetch', 'contact'].map(cmd => (
+                {['about', 'projects', 'experience', 'research', 'sudo', 'vim', 'skills', 'education', 'achievements', 'photo', 'neofetch', 'contact'].map(cmd => (
                   <button
                     key={cmd}
                     onClick={() => handleCmd(cmd)}

@@ -1,35 +1,66 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, RotateCcw, Trophy, X, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Play, RotateCcw, Trophy, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface Position {
   x: number;
   y: number;
 }
 
-const GRID_WIDTH = 18;
+type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
+
+const GRID_WIDTH = 20;
 const GRID_HEIGHT = 14;
 const INITIAL_SPEED = 140;
 
+const OPPOSITES: Record<Direction, Direction> = {
+  UP: 'DOWN',
+  DOWN: 'UP',
+  LEFT: 'RIGHT',
+  RIGHT: 'LEFT',
+};
+
+const MOVES: Record<Direction, Position> = {
+  UP: { x: 0, y: -1 },
+  DOWN: { x: 0, y: 1 },
+  LEFT: { x: -1, y: 0 },
+  RIGHT: { x: 1, y: 0 },
+};
+
 export const SnakeGame: React.FC = () => {
+  // Game state
   const [snake, setSnake] = useState<Position[]>([
     { x: 8, y: 7 },
     { x: 7, y: 7 },
     { x: 6, y: 7 },
   ]);
-  const [direction, setDirection] = useState<'UP' | 'DOWN' | 'LEFT' | 'RIGHT'>('RIGHT');
-  const [nextDirection, setNextDirection] = useState<'UP' | 'DOWN' | 'LEFT' | 'RIGHT'>('RIGHT');
-  const [food, setFood] = useState<Position>({ x: 12, y: 7 });
+  const [food, setFood] = useState<Position>({ x: 14, y: 7 });
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
     return parseInt(localStorage.getItem('terminal_snake_highscore') || '0', 10);
   });
+  const [hasStarted, setHasStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
 
-  const gameRef = useRef<HTMLDivElement>(null);
+  // Mutable refs for rock-solid loop synchronization
+  const snakeRef = useRef<Position[]>([
+    { x: 8, y: 7 },
+    { x: 7, y: 7 },
+    { x: 6, y: 7 },
+  ]);
+  const currentDirRef = useRef<Direction>('RIGHT');
+  const dirQueueRef = useRef<Direction[]>([]);
+  const foodRef = useRef<Position>({ x: 14, y: 7 });
+  const hasStartedRef = useRef(false);
+  const gameOverRef = useRef(false);
+  const isPausedRef = useRef(false);
 
-  // Play audio blip
+  // Sync refs with state
+  hasStartedRef.current = hasStarted;
+  gameOverRef.current = gameOver;
+  isPausedRef.current = isPaused;
+
+  // Sound generator
   const playBeep = useCallback((frequency = 440, duration = 0.08) => {
     try {
       const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -39,7 +70,7 @@ export const SnakeGame: React.FC = () => {
       gain.connect(audioCtx.destination);
       osc.type = 'square';
       osc.frequency.value = frequency;
-      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
       osc.start(audioCtx.currentTime);
       osc.stop(audioCtx.currentTime + duration);
@@ -68,23 +99,54 @@ export const SnakeGame: React.FC = () => {
       { x: 7, y: 7 },
       { x: 6, y: 7 },
     ];
+    const initialFood = generateFood(initialSnake);
+
+    snakeRef.current = initialSnake;
+    currentDirRef.current = 'RIGHT';
+    dirQueueRef.current = [];
+    foodRef.current = initialFood;
+
     setSnake(initialSnake);
-    setDirection('RIGHT');
-    setNextDirection('RIGHT');
-    setFood(generateFood(initialSnake));
+    setFood(initialFood);
     setScore(0);
     setGameOver(false);
     setIsPaused(false);
-    setIsPlaying(true);
+    setHasStarted(false);
     playBeep(520, 0.1);
   }, [generateFood, playBeep]);
 
-  // Handle keyboard inputs
+  const queueDirection = useCallback((newDir: Direction) => {
+    if (gameOverRef.current) return;
+
+    if (!hasStartedRef.current) {
+      setHasStarted(true);
+      hasStartedRef.current = true;
+    }
+
+    if (isPausedRef.current) return;
+
+    const lastPlannedDir = dirQueueRef.current.length > 0
+      ? dirQueueRef.current[dirQueueRef.current.length - 1]
+      : currentDirRef.current;
+
+    // Disallow reversing directly into oneself
+    if (newDir !== lastPlannedDir && newDir !== OPPOSITES[lastPlannedDir]) {
+      if (dirQueueRef.current.length < 3) {
+        dirQueueRef.current.push(newDir);
+      }
+    }
+  }, []);
+
+  // Key event listener with CAPTURE phase to prevent terminal input interception
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Prevent page scrolling with arrow keys
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+      // Arrow keys, WASD, Space, R
+      const gameKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'W', 's', 'S', 'a', 'A', 'd', 'D', ' ', 'r', 'R'];
+      
+      if (gameKeys.includes(e.key)) {
+        // Prevent terminal scrolling or typing command history
         e.preventDefault();
+        e.stopPropagation();
       }
 
       if (e.key === 'r' || e.key === 'R') {
@@ -93,119 +155,112 @@ export const SnakeGame: React.FC = () => {
       }
 
       if (e.key === ' ' || e.key === 'p' || e.key === 'P') {
+        if (!hasStartedRef.current) {
+          setHasStarted(true);
+          return;
+        }
         setIsPaused(prev => !prev);
         return;
       }
-
-      if (gameOver || isPaused) return;
 
       switch (e.key) {
         case 'ArrowUp':
         case 'w':
         case 'W':
-          if (direction !== 'DOWN') setNextDirection('UP');
+          queueDirection('UP');
           break;
         case 'ArrowDown':
         case 's':
         case 'S':
-          if (direction !== 'UP') setNextDirection('DOWN');
+          queueDirection('DOWN');
           break;
         case 'ArrowLeft':
         case 'a':
         case 'A':
-          if (direction !== 'RIGHT') setNextDirection('LEFT');
+          queueDirection('LEFT');
           break;
         case 'ArrowRight':
         case 'd':
         case 'D':
-          if (direction !== 'LEFT') setNextDirection('RIGHT');
+          queueDirection('RIGHT');
           break;
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [direction, gameOver, isPaused, resetGame]);
+    window.addEventListener('keydown', handleKeyDown, { capture: true });
+    return () => window.removeEventListener('keydown', handleKeyDown, { capture: true });
+  }, [queueDirection, resetGame]);
 
-  // Main game loop
+  // Main game tick loop
   useEffect(() => {
-    if (gameOver || isPaused || !isPlaying) return;
+    if (!hasStarted || gameOver || isPaused) return;
 
-    const currentSpeed = Math.max(70, INITIAL_SPEED - Math.floor(score / 5) * 8);
+    const currentSpeed = Math.max(75, INITIAL_SPEED - Math.floor(score / 5) * 8);
 
-    const timer = setInterval(() => {
-      setDirection(nextDirection);
+    const intervalId = setInterval(() => {
+      // Dequeue next direction if available
+      if (dirQueueRef.current.length > 0) {
+        currentDirRef.current = dirQueueRef.current.shift()!;
+      }
 
-      setSnake(prevSnake => {
-        const head = { ...prevSnake[0] };
+      const move = MOVES[currentDirRef.current];
+      const prevSnake = snakeRef.current;
+      const head = { ...prevSnake[0] };
 
-        switch (nextDirection) {
-          case 'UP':
-            head.y -= 1;
-            break;
-          case 'DOWN':
-            head.y += 1;
-            break;
-          case 'LEFT':
-            head.x -= 1;
-            break;
-          case 'RIGHT':
-            head.x += 1;
-            break;
-        }
+      let nextX = head.x + move.x;
+      let nextY = head.y + move.y;
 
-        // Wall collision
-        if (head.x < 0 || head.x >= GRID_WIDTH || head.y < 0 || head.y >= GRID_HEIGHT) {
-          setGameOver(true);
-          playBeep(220, 0.3);
-          return prevSnake;
-        }
+      // Wrap around walls (classic retro arcade style)
+      if (nextX < 0) nextX = GRID_WIDTH - 1;
+      if (nextX >= GRID_WIDTH) nextX = 0;
+      if (nextY < 0) nextY = GRID_HEIGHT - 1;
+      if (nextY >= GRID_HEIGHT) nextY = 0;
 
-        // Self collision
-        if (prevSnake.some(seg => seg.x === head.x && seg.y === head.y)) {
-          setGameOver(true);
-          playBeep(220, 0.3);
-          return prevSnake;
-        }
+      const newHead: Position = { x: nextX, y: nextY };
+      const currentFood = foodRef.current;
+      const isEating = newHead.x === currentFood.x && newHead.y === currentFood.y;
 
-        const newSnake = [head, ...prevSnake];
+      // Self collision: tail moves forward unless eating
+      const bodyToCheck = isEating ? prevSnake : prevSnake.slice(0, -1);
+      const isSelfCollision = bodyToCheck.some(seg => seg.x === newHead.x && seg.y === newHead.y);
 
-        // Food collision
-        if (head.x === food.x && head.y === food.y) {
-          playBeep(780, 0.1);
-          setScore(s => {
-            const newScore = s + 1;
-            if (newScore > highScore) {
-              setHighScore(newScore);
-              localStorage.setItem('terminal_snake_highscore', newScore.toString());
-            }
-            return newScore;
-          });
-          setFood(generateFood(newSnake));
-        } else {
-          newSnake.pop();
-        }
+      if (isSelfCollision) {
+        setGameOver(true);
+        playBeep(180, 0.3);
+        return;
+      }
 
-        return newSnake;
-      });
+      // Grow or move
+      const updatedSnake = [newHead, ...prevSnake];
+
+      if (isEating) {
+        playBeep(780, 0.1);
+        const newFood = generateFood(updatedSnake);
+        foodRef.current = newFood;
+        setFood(newFood);
+
+        setScore(prevScore => {
+          const newScore = prevScore + 1;
+          if (newScore > highScore) {
+            setHighScore(newScore);
+            localStorage.setItem('terminal_snake_highscore', newScore.toString());
+          }
+          return newScore;
+        });
+      } else {
+        updatedSnake.pop();
+      }
+
+      snakeRef.current = updatedSnake;
+      setSnake(updatedSnake);
     }, currentSpeed);
 
-    return () => clearInterval(timer);
-  }, [nextDirection, food, gameOver, isPaused, isPlaying, score, highScore, generateFood, playBeep]);
-
-  const handleTouchDir = (dir: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
-    if (gameOver || isPaused) return;
-    if (dir === 'UP' && direction !== 'DOWN') setNextDirection('UP');
-    if (dir === 'DOWN' && direction !== 'UP') setNextDirection('DOWN');
-    if (dir === 'LEFT' && direction !== 'RIGHT') setNextDirection('LEFT');
-    if (dir === 'RIGHT' && direction !== 'LEFT') setNextDirection('RIGHT');
-  };
+    return () => clearInterval(intervalId);
+  }, [hasStarted, gameOver, isPaused, score, highScore, generateFood, playBeep]);
 
   return (
     <div 
-      ref={gameRef}
-      tabIndex={0}
-      className="p-3 sm:p-4 rounded bg-terminal-hover border border-terminal-border space-y-3 font-mono text-xs max-w-lg animate-fade-in my-2 outline-none shadow-lg"
+      className="p-3 sm:p-4 rounded bg-terminal-hover border border-terminal-border space-y-3 font-mono text-xs max-w-lg animate-fade-in my-2 outline-none shadow-lg select-none"
     >
       {/* Title & Scoreboard */}
       <div className="flex items-center justify-between border-b border-terminal-border/60 pb-2">
@@ -223,13 +278,13 @@ export const SnakeGame: React.FC = () => {
       </div>
 
       {/* Grid Canvas */}
-      <div className="relative bg-terminal border-2 border-terminal-border rounded p-1 mx-auto select-none">
+      <div className="relative bg-terminal border-2 border-terminal-border rounded p-1 mx-auto">
         <div 
           className="grid gap-[2px]"
           style={{
             gridTemplateColumns: `repeat(${GRID_WIDTH}, minmax(0, 1fr))`,
             width: '100%',
-            maxWidth: '340px',
+            maxWidth: '380px',
             aspectRatio: `${GRID_WIDTH} / ${GRID_HEIGHT}`,
           }}
         >
@@ -249,7 +304,7 @@ export const SnakeGame: React.FC = () => {
                     : isBody
                     ? 'bg-terminal-success/80'
                     : isFood
-                    ? 'bg-terminal-warning animate-pulse'
+                    ? 'bg-terminal-warning animate-pulse font-bold'
                     : 'bg-terminal-hover/40'
                 }`}
               >
@@ -259,9 +314,27 @@ export const SnakeGame: React.FC = () => {
           })}
         </div>
 
+        {/* Start Overlay */}
+        {!hasStarted && !gameOver && (
+          <div className="absolute inset-0 bg-terminal/85 backdrop-blur-xs flex flex-col items-center justify-center gap-2 rounded text-center animate-fade-in p-2">
+            <div className="text-terminal-accent font-bold text-sm">READY TO PLAY?</div>
+            <div className="text-terminal-muted text-[11px]">Walls wrap around. Eat ★ to grow!</div>
+            <button
+              onClick={() => {
+                setHasStarted(true);
+                hasStartedRef.current = true;
+              }}
+              className="mt-1 px-3 py-1 bg-terminal-accent text-terminal-bg font-bold rounded text-xs hover:opacity-90 transition-opacity flex items-center gap-1.5 cursor-pointer shadow-md"
+            >
+              <Play size={12} />
+              <span>Press Arrow Key to Start</span>
+            </button>
+          </div>
+        )}
+
         {/* Game Over Overlay */}
         {gameOver && (
-          <div className="absolute inset-0 bg-terminal/90 backdrop-blur-xs flex flex-col items-center justify-center gap-2 rounded text-center animate-fade-in">
+          <div className="absolute inset-0 bg-terminal/90 backdrop-blur-xs flex flex-col items-center justify-center gap-2 rounded text-center animate-fade-in p-2">
             <div className="text-terminal-error font-bold text-sm sm:text-base tracking-wider">GAME OVER</div>
             <div className="text-xs text-terminal-muted">Final Score: <strong className="text-terminal-text">{score}</strong></div>
             <button
@@ -275,7 +348,7 @@ export const SnakeGame: React.FC = () => {
         )}
 
         {/* Paused Overlay */}
-        {isPaused && !gameOver && (
+        {isPaused && !gameOver && hasStarted && (
           <div className="absolute inset-0 bg-terminal/80 backdrop-blur-xs flex flex-col items-center justify-center rounded text-center">
             <div className="text-terminal-warning font-bold text-sm">PAUSED</div>
             <div className="text-[11px] text-terminal-muted">Press Space to Resume</div>
@@ -286,30 +359,30 @@ export const SnakeGame: React.FC = () => {
       {/* Touch D-Pad for Mobile */}
       <div className="flex flex-col items-center gap-1 sm:hidden pt-1">
         <button
-          onClick={() => handleTouchDir('UP')}
-          className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover"
+          onClick={() => queueDirection('UP')}
+          className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover cursor-pointer"
           aria-label="Up"
         >
           <ArrowUp size={16} />
         </button>
         <div className="flex gap-4">
           <button
-            onClick={() => handleTouchDir('LEFT')}
-            className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover"
+            onClick={() => queueDirection('LEFT')}
+            className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover cursor-pointer"
             aria-label="Left"
           >
             <ArrowLeft size={16} />
           </button>
           <button
-            onClick={() => handleTouchDir('DOWN')}
-            className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover"
+            onClick={() => queueDirection('DOWN')}
+            className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover cursor-pointer"
             aria-label="Down"
           >
             <ArrowDown size={16} />
           </button>
           <button
-            onClick={() => handleTouchDir('RIGHT')}
-            className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover"
+            onClick={() => queueDirection('RIGHT')}
+            className="w-11 h-9 rounded bg-terminal border border-terminal-border flex items-center justify-center text-terminal-accent active:bg-terminal-hover cursor-pointer"
             aria-label="Right"
           >
             <ArrowRight size={16} />
@@ -325,14 +398,14 @@ export const SnakeGame: React.FC = () => {
         <div className="flex items-center gap-2 ml-auto">
           <button
             onClick={() => setIsPaused(p => !p)}
-            className="hover:text-terminal-text transition-colors"
+            className="hover:text-terminal-text transition-colors cursor-pointer"
           >
             {isPaused ? 'Resume' : 'Pause'} [Space]
           </button>
           <span>•</span>
           <button
             onClick={resetGame}
-            className="hover:text-terminal-text transition-colors"
+            className="hover:text-terminal-text transition-colors cursor-pointer"
           >
             Restart [R]
           </button>

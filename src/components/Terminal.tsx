@@ -30,7 +30,8 @@ export const Terminal: React.FC = () => {
     'ascii', 'portrait', 'neofetch', 'contact', 'email', 'socials', 
     'theme', 'clear', 'banner', 'date', 'sudo',
     'vi', 'vim', 'nvim', 'nano', 'vscode', 'code',
-    'classic', 'academic', 'homepage'
+    'classic', 'academic', 'homepage',
+    'views', 'hits', 'visitors', 'snake', 'game', 'pacman'
   ];
 
   // Initialize with the Welcome Banner

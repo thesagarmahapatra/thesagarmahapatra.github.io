@@ -14,6 +14,15 @@ function App() {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2700);
+
+    // Record non-local remote global page view across all browsing sessions
+    try {
+      const img = new Image();
+      img.src = `https://hits.sh/thesagarmahapatra.github.io.svg?_t=${Date.now()}`;
+    } catch {
+      // Ignore if offline
+    }
+
     return () => clearTimeout(timer);
   }, []);
 

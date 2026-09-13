@@ -16,6 +16,8 @@ import { Photo } from './sections/Photo';
 import { Contact } from './sections/Contact';
 import { Help } from './sections/Help';
 import { NotFound } from './sections/NotFound';
+import { ViewsTracker } from './sections/ViewsTracker';
+import { SnakeGame } from './sections/SnakeGame';
 
 interface CommandProcessorProps {
   command: string;
@@ -73,6 +75,29 @@ export const CommandProcessor: React.FC<CommandProcessorProps> = ({
             <div className="text-[11px] text-terminal-muted">
               Redirects to Sagar&apos;s formal academic webpage at IIT Bombay featuring a conventional CV layout, publications, and background.
             </div>
+          </div>
+        );
+
+      case 'views':
+      case 'hits':
+      case 'visitors':
+      case 'stats':
+      case 'traffic':
+        return <ViewsTracker />;
+
+      case 'snake':
+      case 'game':
+      case 'play':
+      case 'easteregg':
+        return <SnakeGame />;
+
+      case 'pacman':
+        return (
+          <div className="space-y-2 my-1">
+            <div className="text-terminal-warning font-mono text-xs sm:text-sm">
+              🍒 Waka waka! Pacman was eaten by Inky, but the classic Unix Snake game is alive and ready!
+            </div>
+            <SnakeGame />
           </div>
         );
 

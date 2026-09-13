@@ -23,7 +23,8 @@ export const Help: React.FC<HelpProps> = ({ onRunCommand }) => {
     { cmd: 'classic', desc: 'Prefer a classic document view? Visit Sagar’s IITB academic homepage' },
     { cmd: 'clear', desc: 'Clear the terminal screen buffer (or Ctrl+L)' },
     { cmd: 'whoami', desc: 'Display active user and role metadata' },
-    { cmd: 'date', desc: 'Print current system time and date' },
+    { cmd: 'views', desc: 'Display global visitor hit count and cloud analytics (stored remotely)' },
+    { cmd: 'snake', desc: 'Play retro terminal Snake game (Easter egg)' },
     { cmd: 'sudo', desc: 'Execute superuser command (Easter egg)' }
   ];
 

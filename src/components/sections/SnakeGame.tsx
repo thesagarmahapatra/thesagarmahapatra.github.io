@@ -268,8 +268,9 @@ export const SnakeGame: React.FC = () => {
           <span className="text-base">🐍</span>
           <span className="text-terminal-accent font-bold text-sm">TERMINAL SNAKE</span>
         </div>
-        <div className="flex items-center gap-4 text-xs">
+        <div className="flex items-center gap-3 sm:gap-4 text-xs">
           <div>Score: <strong className="text-terminal-accent">{score}</strong></div>
+          <div>Length: <strong className="text-terminal-success">{snake.length}</strong></div>
           <div className="flex items-center gap-1 text-terminal-warning">
             <Trophy size={13} />
             <span>High: {highScore}</span>
@@ -298,17 +299,17 @@ export const SnakeGame: React.FC = () => {
             return (
               <div
                 key={idx}
-                className={`rounded-[2px] transition-colors flex items-center justify-center text-[10px] ${
+                className={`rounded-[2px] transition-all flex items-center justify-center text-[10px] leading-none ${
                   isHead
-                    ? 'bg-terminal-accent text-terminal-bg font-bold shadow-sm'
+                    ? 'bg-terminal-accent text-terminal-bg font-bold shadow-md ring-1 ring-terminal-accent'
                     : isBody
-                    ? 'bg-terminal-success/80'
+                    ? 'bg-terminal-success text-terminal-bg font-bold shadow-xs'
                     : isFood
-                    ? 'bg-terminal-warning animate-pulse font-bold'
+                    ? 'bg-terminal-warning text-terminal-bg animate-pulse font-bold'
                     : 'bg-terminal-hover/40'
                 }`}
               >
-                {isHead ? '•' : isFood ? '★' : ''}
+                {isHead ? '●' : isBody ? '■' : isFood ? '★' : ''}
               </div>
             );
           })}

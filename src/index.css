@@ -154,6 +154,9 @@ button, input, a, .click-cmd {
 .bg-terminal-header { background-color: var(--terminal-header); }
 .bg-terminal-hover { background-color: var(--terminal-hover); }
 .bg-terminal-accent { background-color: var(--terminal-accent); }
+.bg-terminal-success { background-color: var(--terminal-success); }
+.bg-terminal-warning { background-color: var(--terminal-warning); }
+.bg-terminal-error { background-color: var(--terminal-error); }
 
 .text-terminal-text { color: var(--terminal-text); }
 .text-terminal-accent { color: var(--terminal-accent); }
